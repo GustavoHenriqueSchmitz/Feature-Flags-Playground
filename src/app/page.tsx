@@ -1,75 +1,72 @@
 "use client";
-
-import { Jost } from "next/font/google";
-import { ChangeEvent, FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useFlagsmith } from "flagsmith/react";
-
-const jost = Jost({ subsets: ["latin"] });
-
-export type User = {
-  name: string;
-  position: string;
-};
+import Link from "next/link";
+import { useFlagsmith, useFlags } from "flagsmith/react";
+import { useEffect } from "react";
 
 export default function Page() {
   const flagsmith = useFlagsmith();
-  const [user, toggleUser] = useState<User>({
-    name: "",
-    position: "freelancer",
-  });
+  const flags = useFlags(["login_page"]);
 
-  const router = useRouter();
-
-  const handleUserName = (e: ChangeEvent<HTMLInputElement>) => {
-    toggleUser({
-      ...user,
-      name: e.target.value,
-    });
-  };
-
-  const handleUserPosition = (e: ChangeEvent<HTMLSelectElement>) => {
-    toggleUser({
-      ...user,
-      position: e.target.value,
-    });
-  };
-
-  const handleOnSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    await flagsmith.setTrait("profession", user.position); // setting the "profession" trait as the one selected by user
-    router.push("/about?name=" + user.name + "&position=" + user.position);
-  };
+  useEffect(() => {
+    async function setRoleTrait() {
+      const userRole = Math.random() < 0.5 ? "admin" : "user";
+      await flagsmith.setTrait("role", userRole);
+    }
+    setRoleTrait();
+  }, [flagsmith]);
 
   return (
-    <>
-      <main className={`main-login ${jost.className}`}>
-        <div className="login-box">
-          <h1>Login</h1>
-          <form className="login-form" onSubmit={handleOnSubmit}>
-            <input
-              type="text"
-              placeholder="Username"
-              className="login-input"
-              onChange={handleUserName}
-            />
-            <select className="login-menu" onChange={handleUserPosition}>
-              <option className="login-menu-item" defaultValue="freelancer">
-                Freelancer
-              </option>
-              <option className="login-menu-item" value="front-end-developer">
-                Front-end developer
-              </option>
-              <option className="login-menu-item" value="designer">
-                Designer
-              </option>
-            </select>
-            <button className="login-form-btn" type="submit">
-              Login
-            </button>
-          </form>
-        </div>
-      </main>
-    </>
+    <main
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100vh",
+        fontFamily: "sans-serif",
+        backgroundColor: "#111",
+        color: "white",
+      }}
+    >
+      <h1
+        style={{ fontSize: "2.5rem", fontWeight: "bold", marginBottom: "1rem" }}
+      >
+        Welcome to the Application
+      </h1>
+      <p style={{ color: "#aaa", marginBottom: "2rem" }}>
+        Please log in to access your dashboard.
+      </p>
+      {!flags.login_page.enabled ? (
+        <Link
+          href="/about"
+          style={{
+            padding: "0.75rem 1.5rem",
+            backgroundColor: "#0070f3",
+            color: "white",
+            textDecoration: "none",
+            borderRadius: "8px",
+            fontSize: "1rem",
+            fontWeight: "600",
+          }}
+        >
+          Go to About Page
+        </Link>
+      ) : (
+        <Link
+          href="/login"
+          style={{
+            padding: "0.75rem 1.5rem",
+            backgroundColor: "#0070f3",
+            color: "white",
+            textDecoration: "none",
+            borderRadius: "8px",
+            fontSize: "1rem",
+            fontWeight: "600",
+          }}
+        >
+          Go to Login Page
+        </Link>
+      )}
+    </main>
   );
 }
