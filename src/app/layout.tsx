@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Provider from "./provider";
-import flagsmith from "flagsmith/isomorphic";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,21 +22,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const flagsmithState = await flagsmith
-    .init({
-      environmentID: process.env.Flagsmith,
-      identity: "test_user_id",
-    })
-    .then(() => {
-      return flagsmith.getState();
-    });
-
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Provider flagsmithState={flagsmithState}>{children}</Provider>
+        {children}
       </body>
     </html>
   );
