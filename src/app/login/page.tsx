@@ -8,8 +8,6 @@ export type User = {
   position: string;
 };
 
-export const dynamic = "force-dynamic";
-
 export default function Page() {
   const flagsmith = useFlagsmith();
   const flags = useFlags(["login_page"]);
