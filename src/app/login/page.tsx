@@ -1,16 +1,14 @@
 "use client";
-
-import { Jost } from "next/font/google";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { notFound, useRouter } from "next/navigation";
 import { useFlagsmith, useFlags } from "flagsmith/react";
-
-const jost = Jost({ subsets: ["latin"] });
 
 export type User = {
   name: string;
   position: string;
 };
+
+export const dynamic = "force-dynamic";
 
 export default function Page() {
   const flagsmith = useFlagsmith();
@@ -19,7 +17,6 @@ export default function Page() {
     name: "",
     position: "freelancer",
   });
-
   const router = useRouter();
 
   const handleUserName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -50,7 +47,7 @@ export default function Page() {
 
   return (
     <>
-      <main className={`main-login ${jost.className}`}>
+      <main className={`main-login`}>
         <div className="login-box">
           <h1>Login</h1>
           <form className="login-form" onSubmit={handleOnSubmit}>
