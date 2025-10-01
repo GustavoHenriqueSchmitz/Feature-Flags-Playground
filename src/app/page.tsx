@@ -1,19 +1,8 @@
-"use client";
 import Link from "next/link";
-import { useFlagsmith, useFlags } from "flagsmith/react";
-import { useEffect } from "react";
+import { get } from "@vercel/edge-config";
 
-export default function Page() {
-  const flagsmith = useFlagsmith();
-  const flags = useFlags(["login_page"]);
-
-  useEffect(() => {
-    async function setRoleTrait() {
-      const userRole = Math.random() < 0.5 ? "admin" : "user";
-      await flagsmith.setTrait("role", userRole);
-    }
-    setRoleTrait();
-  }, [flagsmith]);
+export default async function Page() {
+  const showLoginPage = await get<boolean>("show_login_page");
 
   return (
     <main
@@ -36,22 +25,8 @@ export default function Page() {
       <p style={{ color: "#aaa", marginBottom: "2rem" }}>
         Please log in to access your dashboard.
       </p>
-      {!flags.login_page.enabled ? (
-        <Link
-          href="/about"
-          style={{
-            padding: "0.75rem 1.5rem",
-            backgroundColor: "#0070f3",
-            color: "white",
-            textDecoration: "none",
-            borderRadius: "8px",
-            fontSize: "1rem",
-            fontWeight: "600",
-          }}
-        >
-          Go to About Page
-        </Link>
-      ) : (
+
+      {showLoginPage ? (
         <Link
           href="/login"
           style={{
@@ -65,6 +40,21 @@ export default function Page() {
           }}
         >
           Go to Login Page
+        </Link>
+      ) : (
+        <Link
+          href="/about"
+          style={{
+            padding: "0.75rem 1.5rem",
+            backgroundColor: "#0070f3",
+            color: "white",
+            textDecoration: "none",
+            borderRadius: "8px",
+            fontSize: "1rem",
+            fontWeight: "600",
+          }}
+        >
+          Go to About Page
         </Link>
       )}
     </main>

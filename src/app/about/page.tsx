@@ -1,9 +1,8 @@
-"use client";
 import Image from "next/image";
-import { useFlags } from "flagsmith/react";
+import { get } from "@vercel/edge-config";
 
-export default function Page() {
-  const flags = useFlags(["configure_card_controller"]);
+export default async function Page() {
+  const configure_card_controller = await get("configure_card_controller");
 
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
@@ -54,7 +53,7 @@ export default function Page() {
             Read our docs
           </a>
         </div>
-        {flags.configure_card_controller.enabled ? (
+        {configure_card_controller ? (
           <a
             href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
             className="rounded-lg border border-transparent bg-transparent p-4 px-5 transition-colors duration-200 hover:border-[rgba(var(--card-border-rgb),0.15)] hover:bg-[rgba(var(--card-rgb),0.1)] max-[700px]:px-10"

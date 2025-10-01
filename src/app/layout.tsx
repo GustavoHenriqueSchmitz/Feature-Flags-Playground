@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import flagsmith from "flagsmith/isomorphic";
-import { FeatureFlagProvider } from "./components/FeatureFlagProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,19 +13,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  await flagsmith.init({
-    environmentID: process.env.Flagsmith,
-    identity: "test_user_id",
-  });
-  const serverState = flagsmith.getState();
-
   return (
     <html lang="en">
-      <body>
-        <FeatureFlagProvider serverState={serverState}>
-          {children}
-        </FeatureFlagProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
