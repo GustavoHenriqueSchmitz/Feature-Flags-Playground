@@ -21,6 +21,9 @@ export default async function RootLayout({
   });
   const serverState = flagsmith.getState();
 
+  const userRole = Math.random() < 0.5 ? "admin" : "user";
+  await flagsmith.setTrait("role", userRole);
+
   return (
     <html lang="en">
       <body>

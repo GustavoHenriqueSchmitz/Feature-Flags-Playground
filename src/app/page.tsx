@@ -1,19 +1,9 @@
 "use client";
 import Link from "next/link";
-import { useFlagsmith, useFlags } from "flagsmith/react";
-import { useEffect } from "react";
+import { useFlags } from "flagsmith/react";
 
 export default function Page() {
-  const flagsmith = useFlagsmith();
   const flags = useFlags(["login_page"]);
-
-  useEffect(() => {
-    async function setRoleTrait() {
-      const userRole = Math.random() < 0.5 ? "admin" : "user";
-      await flagsmith.setTrait("role", userRole);
-    }
-    setRoleTrait();
-  }, [flagsmith]);
 
   return (
     <main
