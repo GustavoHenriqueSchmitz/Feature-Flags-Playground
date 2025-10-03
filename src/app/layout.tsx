@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import flagsmith from "flagsmith/isomorphic";
 import { FeatureFlagProvider } from "./components/FeatureFlagProvider";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -30,6 +32,8 @@ export default async function RootLayout({
         <FeatureFlagProvider serverState={serverState}>
           {children}
         </FeatureFlagProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
