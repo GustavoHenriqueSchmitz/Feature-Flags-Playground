@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import flagsmith from "flagsmith/isomorphic";
-import { FeatureFlagProvider } from "./components/FeatureFlagProvider";
+import { StatsigBootstrapProvider } from "@statsig/next";
+import { identify } from "./flags";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,21 +15,18 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  await flagsmith.init({
-    environmentID: process.env.Flagsmith,
-    identity: "test_user_id",
-  });
-  const serverState = flagsmith.getState();
-
-  const userRole = Math.random() < 0.5 ? "admin" : "user";
-  await flagsmith.setTrait("role", userRole);
+  const user = await identify();
 
   return (
     <html lang="en">
       <body>
-        <FeatureFlagProvider serverState={serverState}>
+        <StatsigBootstrapProvider
+          user={user}
+          clientKey={process.env.NEXT_PUBLIC_STATSIG_CLIENT_KEY ?? ""}
+          serverKey={process.env.STATSIG_SERVER_API_KEY ?? ""}
+        >
           {children}
-        </FeatureFlagProvider>
+        </StatsigBootstrapProvider>
       </body>
     </html>
   );
