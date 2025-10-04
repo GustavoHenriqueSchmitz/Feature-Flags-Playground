@@ -1,8 +1,7 @@
 import { statsigAdapter, StatsigUser } from "@flags-sdk/statsig";
 import { flag, dedupe } from "flags/next";
 import type { Identify } from "flags";
-
-import { randomUUID } from "crypto";
+import { cookies, headers } from "next/headers";
 
 type UserProfile = {
   userID: string;
@@ -12,14 +11,23 @@ type UserProfile = {
 };
 
 export const identify = dedupe((async (): Promise<UserProfile> => {
-  const newUserProfile: UserProfile = {
-    userID: randomUUID(),
-    custom: {
-      role: Math.random() > 0.5 ? "admin" : "user",
-    },
-  };
+  const requestHeaders = await headers();
+  const userProfileHeader = requestHeaders.get("x-user-profile");
 
-  return newUserProfile;
+  if (userProfileHeader) {
+    return JSON.parse(userProfileHeader);
+  }
+
+  const cookieStore = await cookies();
+  const userCookie = cookieStore.get("userProfile");
+  if (userCookie) {
+    return JSON.parse(userCookie.value);
+  }
+
+  return {
+    userID: "anonymous",
+    custom: { role: "user" },
+  };
 }) satisfies Identify<StatsigUser>);
 
 export const createFeatureFlag = (key: string) =>
