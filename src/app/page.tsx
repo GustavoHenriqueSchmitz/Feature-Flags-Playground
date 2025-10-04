@@ -1,9 +1,8 @@
-"use client";
 import Link from "next/link";
-import { useFlags } from "flagsmith/react";
+import { createFeatureFlag } from "./flags";
 
-export default function Page() {
-  const flags = useFlags(["login_page"]);
+export default async function Page() {
+  const isLoginPageActivated = await createFeatureFlag("login_page")();
 
   return (
     <main
@@ -26,7 +25,7 @@ export default function Page() {
       <p style={{ color: "#aaa", marginBottom: "2rem" }}>
         Please log in to access your dashboard.
       </p>
-      {!flags.login_page.enabled ? (
+      {!isLoginPageActivated ? (
         <Link
           href="/about"
           style={{

@@ -1,7 +1,7 @@
 "use client";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { notFound, useRouter } from "next/navigation";
-import { useFlagsmith, useFlags } from "flagsmith/react";
+import { useGateValue } from "@statsig/react-bindings";
 
 export type User = {
   name: string;
@@ -9,13 +9,12 @@ export type User = {
 };
 
 export default function Page() {
-  const flagsmith = useFlagsmith();
-  const flags = useFlags(["login_page"]);
   const [user, toggleUser] = useState<User>({
     name: "",
     position: "freelancer",
   });
   const router = useRouter();
+  const isLoginPageActivated = useGateValue("login_page");
 
   const handleUserName = (e: ChangeEvent<HTMLInputElement>) => {
     toggleUser({
@@ -33,15 +32,12 @@ export default function Page() {
 
   const handleOnSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await flagsmith.setTrait("profession", user.position);
     router.push("/about?name=" + user.name + "&position=" + user.position);
   };
 
-  useEffect(() => {
-    if (!flags.login_page.enabled) {
-      notFound();
-    }
-  });
+  if (!isLoginPageActivated) {
+    notFound();
+  }
 
   return (
     <>
