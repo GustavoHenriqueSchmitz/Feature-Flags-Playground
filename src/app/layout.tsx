@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { StatsigBootstrapProvider } from "@statsig/next";
-import { identify } from "./flags";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
@@ -15,18 +13,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await identify();
-
   return (
     <html lang="en">
       <body>
-        <StatsigBootstrapProvider
-          user={user}
-          clientKey={process.env.NEXT_PUBLIC_STATSIG_CLIENT_KEY ?? ""}
-          serverKey={process.env.STATSIG_SERVER_API_KEY ?? ""}
-        >
-          {children}
-        </StatsigBootstrapProvider>
+        {children}
         <Analytics />
         <SpeedInsights />
       </body>

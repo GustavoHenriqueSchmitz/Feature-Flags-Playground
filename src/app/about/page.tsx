@@ -1,11 +1,6 @@
 import Image from "next/image";
-import { createFeatureFlag } from "../flags";
 
 export default async function Page() {
-  const isCardControllerActivated = await createFeatureFlag(
-    "card_controller"
-  )();
-
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
@@ -55,7 +50,7 @@ export default async function Page() {
             Read our docs
           </a>
         </div>
-        {isCardControllerActivated ? (
+        {/* {isCardControllerActivated ? (
           <a
             href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
             className="rounded-lg border border-transparent bg-transparent p-4 px-5 transition-colors duration-200 hover:border-[rgba(var(--card-border-rgb),0.15)] hover:bg-[rgba(var(--card-rgb),0.1)] max-[700px]:px-10"
@@ -67,7 +62,7 @@ export default async function Page() {
             </h2>
             <p>Configure your feature rollout with&nbsp;Flagsmith</p>
           </a>
-        ) : null}
+        ) : null} */}
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
         <a

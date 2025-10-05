@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { exampleFlag } from "./flags";
+import { createFeatureFlag } from "./flags";
 
 export default async function Page() {
-  const isLoginPageActivated = await exampleFlag();
+  const isLoginPageActivated = await createFeatureFlag("login_page")();
   console.log(isLoginPageActivated);
 
   return (

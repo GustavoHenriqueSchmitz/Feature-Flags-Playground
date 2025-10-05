@@ -28,17 +28,17 @@ export const identify = dedupe((async (): Promise<UserProfile> => {
   };
 }) satisfies Identify<UserProfile>);
 
-// export const createFeatureFlag = (key: string) =>
-//   flag<boolean>({
-//     key,
-//     adapter: growthbookAdapter.feature<boolean>(),
-//     identify,
-//     defaultValue: false,
-//   });
+export const createFeatureFlag = (key: string) =>
+  flag<boolean>({
+    key,
+    adapter: growthbookAdapter.feature<boolean>(),
+    // identify,
+    defaultValue: false,
+  });
 
-export const exampleFlag = flag({
-  key: "login_page",
-  // identify,
-  adapter: growthbookAdapter.feature<boolean>(),
-  defaultValue: false,
-});
+// export const exampleFlag = flag<boolean>({
+//   key: "login_page",
+//   adapter: growthbookAdapter.feature<boolean>(),
+//   defaultValue: false,
+//   // identify,
+// });
