@@ -1,6 +1,7 @@
 "use client";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { notFound, useRouter } from "next/navigation";
+import { useFeatureIsOn } from "@growthbook/growthbook-react";
 
 export type User = {
   name: string;
@@ -13,6 +14,7 @@ export default function Page() {
     position: "freelancer",
   });
   const router = useRouter();
+  const isLoginPageActivated = useFeatureIsOn("login_page");
 
   const handleUserName = (e: ChangeEvent<HTMLInputElement>) => {
     toggleUser({
@@ -33,9 +35,9 @@ export default function Page() {
     router.push("/about?name=" + user.name + "&position=" + user.position);
   };
 
-  // if (!isLoginPageActivated) {
-  //   notFound();
-  // }
+  if (!isLoginPageActivated) {
+    notFound();
+  }
 
   return (
     <>

@@ -11,6 +11,8 @@
   "dependencies": {
     "@flags-sdk/growthbook": "^0.1.0",
     "@flags-sdk/statsig": "^0.2.2",
+    "@growthbook/growthbook": "^1.6.1",
+    "@growthbook/growthbook-react": "^1.6.1",
     "@statsig/next": "^3.25.6",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
